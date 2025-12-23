@@ -1,6 +1,6 @@
 # Braed - Match3
 
-**Braed** is a unique Match-3 strategy game that blends puzzle mechanics with RPG progression. Players must match tiles to gather resources, cast powerful spells, and overcome increasing difficulties through Cycles and Trials.
+**Braed** is a unique Match-3 strategy game that blends puzzle mechanics with roguelite. Players must match tiles to gather resources, cast powerful spells, and overcome increasing difficulties through Cycles and Trials.
 
 ## 🎮 Game Mechanics
 
