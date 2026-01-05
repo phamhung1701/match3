@@ -1,6 +1,6 @@
-# Braed - Match 3 RPG
+# Braed - Match3
 
-**Braed** is a unique Match-3 strategy game that blends puzzle mechanics with RPG progression. Players must match tiles to gather resources, cast powerful spells, and overcome increasing difficulties through Cycles and Trials.
+**Braed** is a unique Match-3 strategy game that blends puzzle mechanics with roguelite. Players must match tiles to gather resources, cast powerful spells, and overcome increasing difficulties through Cycles and Trials.
 
 ## 🎮 Game Mechanics
 
@@ -34,21 +34,3 @@ The game features 7 distinct tile types, each interacting with your core stats:
   - `Menu`: Main entry point.
   - `Game`: The core gameplay loop.
   - `Shop`: Upgrade and item interface.
-
-## 🚀 Getting Started
-
-1.  **Prerequisites**: Unity 2021.3 or later (Check `ProjectVersion.txt` for exact version).
-2.  **Installation**:
-    ```bash
-    git clone https://github.com/phamhung1701/match3.git
-    ```
-3.  **Open in Unity**: Add the project folder to Unity Hub and open.
-4.  **Play**: Open `Assets/Scenes/Menu.unity` and press Play.
-
-## 🤝 Contributing
-
-This project is under active development. Feel free to submit Pull Requests or open Issues for bugs and feature suggestions.
-
-## 📄 License
-
-[MIT License](LICENSE) (Assuming standard open source perms, please verify)
