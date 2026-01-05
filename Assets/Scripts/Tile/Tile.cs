@@ -17,10 +17,16 @@ public class Tile : MonoBehaviour
 
     FallingState falling;
 
-    public Tile Spawn(Vector3 position)
+    public Tile Spawn(Vector3 position, Transform parent = null)
     {
         Tile instance = pool.GetInstance(this);
         instance.pool = pool;
+        
+        if (parent != null)
+        {
+            instance.transform.SetParent(parent, false);
+        }
+        
         instance.transform.localPosition = position;
         instance.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         instance.disappearProgress = -1f;

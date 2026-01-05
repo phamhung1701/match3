@@ -3,9 +3,18 @@ using Unity.Mathematics;
 
 using static Unity.Mathematics.math;
 using TMPro;
+using UnityEngine.UI;
 
 public class Match3Skin : MonoBehaviour
 {
+    [SerializeField] 
+    Transform tileContainer;  
+    [SerializeField]
+    private GameObject gamePanel;
+    [SerializeField]
+    private Shop shop;
+    public Button proceedButton;
+
     [SerializeField, Range(0.1f, 20f)]
     float dropSpeed = 8f;
 
@@ -154,6 +163,7 @@ public class Match3Skin : MonoBehaviour
 
     public void StartNewGame()
     {
+        gamePanel.SetActive(true);
         busyDuration = 0f;
         totalScoreText.SetText("Total: 0");
         game.StartNewGame();
@@ -161,6 +171,8 @@ public class Match3Skin : MonoBehaviour
         shardText.SetText("Shard: {0}", game.Shard);
         flowText.SetText("Flow: {0}", game.flow);
         whirlText.SetText("Whirl: {0}", game.whirl);
+        mightText.SetText("Might: {0}", game.Might);
+        blessingText.SetText("Blessing {0}", game.Blessing);
         tileOffset = -0.5f * (float2)(game.Size - 1);
         if (tiles.IsUndefined)
         {
@@ -186,7 +198,10 @@ public class Match3Skin : MonoBehaviour
         }
     }
     Tile SpawnTile(TileState t, float x, float y) =>
-            tilePrefabs[(int)t - 1].Spawn(new Vector3(x + tileOffset.x, y + tileOffset.y));
+    tilePrefabs[(int)t - 1].Spawn(
+        new Vector3(x + tileOffset.x, y + tileOffset.y),
+        tileContainer
+    );
 
     public void ResetGrid()
     {
@@ -249,9 +264,7 @@ public class Match3Skin : MonoBehaviour
             }
             else
             {
-                tile = SpawnTile(
-                    game[drop.coordinates], drop.coordinates.x, drop.fromY + newDropOffset
-                );
+                tile = SpawnTile(game[drop.coordinates], drop.coordinates.x, drop.fromY + newDropOffset);
             }
             tiles[drop.coordinates] = tile;
             busyDuration = Mathf.Max(
@@ -264,12 +277,18 @@ public class Match3Skin : MonoBehaviour
     {
         if(game.Cast())
         {
-            StartNewGame();
             totalScoreText.SetText("Strike: {0}", game.TotalScore);
             mightText.SetText("Might: " + FormatSmart(game.Might));
             blessingText.SetText("Blessing: " + FormatSmart(game.Blessing));
             shardText.SetText("Shard: {0}", game.Shard);
+            gamePanel.SetActive(false);
+            shop.OpenShop();
         }
         totalScoreText.SetText("Strike: {0}", game.TotalScore);
+    }
+
+    public void Proceed()
+    {
+        shop.CloseShop();
     }
 }

@@ -5,8 +5,8 @@ public class Data : MonoBehaviour
 {
     public static Data Instance { get; private set; }
 
-    public List<Relic> relics = new List<Relic>();
-    public int Shard;
+    public List<RelicData> relics = new List<RelicData>();
+    public int Shard = 0;
 
     private void Awake()
     {
@@ -19,5 +19,27 @@ public class Data : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public float GetTotalBonusBlessing()
+    {
+        float totalBonus = 0;
+        foreach (RelicData relic in relics)
+        {
+            totalBonus += relic.bonusBlessing;
+        }
+
+        return totalBonus;
+    }
+
+    public float GetTotalBonusMight()
+    {
+        float totalBonus = 0;
+        foreach (RelicData relic in relics)
+        {
+            totalBonus += relic.bonusMight;
+        }
+
+        return totalBonus;
     }
 }

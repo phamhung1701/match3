@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-
-using Random = UnityEngine.Random;
-
 using static Unity.Mathematics.math;
+using Random = UnityEngine.Random;
 
 public class Match3Game : MonoBehaviour
 {
+    [SerializeField] private Shop shop;
+
     //Score and Currency
     public float Might
     { get; private set; }
@@ -35,12 +35,12 @@ public class Match3Game : MonoBehaviour
     private void SetRate()
     {
         might_rate = 0.18f;
-        blessing_rate = 0.18f; 
+        blessing_rate = 0.18f;
         shard_rate = 0.18f;
-        fury_rate = 0.14f; 
-        mirror_rate = 0.10f;  
-        totem_rate = 0.12f;  
-        blight_rate = 0.10f;  
+        fury_rate = 0.14f;
+        mirror_rate = 0.10f;
+        totem_rate = 0.12f;
+        blight_rate = 0.10f;
     }
 
 
@@ -98,7 +98,14 @@ public class Match3Game : MonoBehaviour
         ScaleRequiredScore(cycle, trial);
         Might = 0;
         Blessing = 0;
-        Shard = 0;
+
+        if (shop.RelicNumber != 0)
+        {
+            // Relic effect
+            Might += Data.Instance.GetTotalBonusMight();
+            Blessing += Data.Instance.GetTotalBonusBlessing();
+        }
+
         if (grid.IsUndefined)
         {
             grid = new Grid2D<TileState>(size);
@@ -391,7 +398,7 @@ public class Match3Game : MonoBehaviour
                 case TileState.Shard:
                     color = Color.yellow;
                     shardCount = match.length * scoreMultiplier++;
-                    Shard += shardCount;
+                    Data.Instance.Shard += shardCount;
                     floatScore(match, step, color, shardCount);
                     break;
                 case TileState.Fury:
@@ -451,13 +458,13 @@ public class Match3Game : MonoBehaviour
         TotalScore = Might * Blessing;
         if (TotalScore > RequireScore)
         {
-            if (trial == 3) 
-            { 
+            if (trial == 3)
+            {
                 trial = 1;
                 cycle++;
             }
             else trial++;
-            Shard += flow * 2 + whirl;
+            Data.Instance.Shard += flow * 2 + whirl;
             ScaleRequiredScore(cycle, trial);
             return true;
         }
