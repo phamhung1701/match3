@@ -14,7 +14,7 @@ public class InputHandler : MonoBehaviour, Control.IPlayerActions
     private Vector2 position;
     private bool wasClickedThisFrame = false;
 
-    private void Start()
+    private void Awake()
     {
         control = new Control();
         control.Player.SetCallbacks(this);

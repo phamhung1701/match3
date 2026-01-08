@@ -116,10 +116,7 @@ public class Match3Skin : MonoBehaviour
             tiles[c] = null;
         }
 
-        totalScoreText.SetText("Strike: {0}", game.TotalScore);
-        mightText.SetText("Might: " + FormatSmart(game.Might));
-        blessingText.SetText("Blessing: " + FormatSmart(game.Blessing));
-        shardText.SetText("Shard: {0}", game.Shard);
+        ResetUI();
 
         for (int i = 0; i < game.Scores.Count; i++)
         {
@@ -273,14 +270,14 @@ public class Match3Skin : MonoBehaviour
         }
     }
 
+    [SerializeField] private GameObject gameOver;
+    [SerializeField] private GameOverUI gameOverUI;
+
     public void Cast()
     {
-        if(game.Cast())
+        if (game.Cast())
         {
-            totalScoreText.SetText("Strike: {0}", game.TotalScore);
-            mightText.SetText("Might: " + FormatSmart(game.Might));
-            blessingText.SetText("Blessing: " + FormatSmart(game.Blessing));
-            shardText.SetText("Shard: {0}", game.Shard);
+            ResetUI();
             gamePanel.SetActive(false);
             shop.OpenShop();
         }
@@ -290,5 +287,31 @@ public class Match3Skin : MonoBehaviour
     public void Proceed()
     {
         shop.CloseShop();
+    }
+
+    public void RestartGame()
+    {
+        gamePanel.SetActive(true);
+        Data.Instance.relics.Clear();
+        Data.Instance.Shard = 0;
+        shop.RelicNumber = 0;
+        game.trial = 1;
+        game.cycle = 1;
+        StartNewGame();
+        Data.OnRelicsChanged?.Invoke();
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
+        totalScoreText.SetText("Strike: {0}", game.TotalScore);
+        mightText.SetText("Might: " + FormatSmart(game.Might));
+        blessingText.SetText("Blessing: " + FormatSmart(game.Blessing));
+        shardText.SetText("Shard: {0}", Data.Instance.Shard);
+    }
+
+    public void GamePanel(bool status)
+    {
+        gamePanel.SetActive(status);
     }
 }

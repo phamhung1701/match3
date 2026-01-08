@@ -453,6 +453,9 @@ public class Match3Game : MonoBehaviour
         Scores.Add(score);
     }
 
+    [SerializeField] private GameObject gameOver;
+    [SerializeField] private GameOverUI gameOverUI;
+
     public bool Cast()
     {
         TotalScore = Might * Blessing;
@@ -470,7 +473,8 @@ public class Match3Game : MonoBehaviour
         }
         if (flow == 0 && TotalScore < RequireScore)
         {
-            Debug.Log("game over");
+            gameOver.SetActive(true);
+            gameOverUI.ShowGameOver(TotalScore, cycle, trial);
             return false;
         }
         return false;

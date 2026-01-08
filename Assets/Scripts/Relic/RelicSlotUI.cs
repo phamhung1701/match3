@@ -50,7 +50,7 @@ public class RelicSlotUI : MonoBehaviour
     public void UpdateAffordability(int playerShards)
     {
         // TODO: Gray out if player can't afford
-        // bool canAfford = currentRelic != null && playerShards >= currentRelic.price;
-        // buyButton.interactable = canAfford;
+        bool canAfford = currentRelic != null && playerShards >= currentRelic.price;
+        buyButton.interactable = canAfford;
     }
 }

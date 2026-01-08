@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,12 @@ public class Data : MonoBehaviour
 
     public List<RelicData> relics = new List<RelicData>();
     public int Shard = 0;
+    public static Action OnRelicsChanged;
+    public void addRelic(RelicData data)
+    {
+        relics.Add(data);
+        OnRelicsChanged?.Invoke();
+    }
 
     private void Awake()
     {

@@ -6,6 +6,7 @@ using TMPro;
 public class Shop : MonoBehaviour
 {
     public int RelicNumber = 0;
+    private int MaxRelicCount = 4;
 
     [SerializeField] int slotCount = 3;
     [SerializeField] RelicDatabase relicDatabase;
@@ -69,9 +70,9 @@ public class Shop : MonoBehaviour
         {
             return;
         }
-        if (Data.Instance.Shard >= currentShop[index].price)
+        if (Data.Instance.Shard >= currentShop[index].price && RelicNumber < MaxRelicCount)
         {
-            Data.Instance.relics.Add(currentShop[index]);
+            Data.Instance.addRelic(currentShop[index]);
             Data.Instance.Shard -= currentShop[index].price;
             relicSlots[index].MarkAsSold();
             shardText.SetText("Shards: {0}", Data.Instance.Shard);
