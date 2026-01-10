@@ -18,7 +18,7 @@ public class Game : MonoBehaviour
     private void Awake()
     {
         input = GetComponent<InputHandler>();
-        match3.StartNewGame();
+        // Game is started via StartMenuUI, not here
     }
 
     void Update()

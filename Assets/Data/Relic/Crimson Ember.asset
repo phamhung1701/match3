@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
-  m_Name: Blessing Orb
+  m_Name: Crimson Ember
   m_EditorClassIdentifier: 
-  relicName: Blessing Orb
-  description: +10 Blessing at the start of the trial
-  icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
-  price: 10
-  bonusBlessing: 10
-  bonusMight: 0
+  relicName: Might Stone
+  description: +50 Might at the start of the trial
+  icon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
+  price: 5
+  bonusBlessing: 0
+  bonusMight: 50

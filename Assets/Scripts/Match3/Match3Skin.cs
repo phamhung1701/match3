@@ -77,7 +77,8 @@ public class Match3Skin : MonoBehaviour
         whirlText.color = new Color(1f, 0.647f, 0f);          // orange-ish (#FFA500)
     }
 
-    public bool isPlaying => true;
+    private bool _isPlaying = false;
+    public bool isPlaying => _isPlaying;
     public bool isBusy => false;
     public bool IsBusy => busyDuration > 0f;
     public void DoWork() {
@@ -164,6 +165,7 @@ public class Match3Skin : MonoBehaviour
 
     public void StartNewGame()
     {
+        _isPlaying = true;
         gamePanel.SetActive(true);
         busyDuration = 0f;
         totalScoreText.SetText("Total: 0");

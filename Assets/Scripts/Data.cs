@@ -10,6 +10,15 @@ public class Data : MonoBehaviour
     public int Shard = 0;
     public static Action OnRelicsChanged;
     
+    // Ensure this runs before other scripts
+    void OnEnable()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+    
     public void addRelic(RelicData data)
     {
         relics.Add(data);
@@ -23,7 +32,7 @@ public class Data : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
