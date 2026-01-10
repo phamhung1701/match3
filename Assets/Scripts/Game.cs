@@ -23,6 +23,7 @@ public class Game : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0) return;
         if (match3.isPlaying)
         {
             if (!match3.isBusy)

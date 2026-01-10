@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class OwnedRelicsDisplay : MonoBehaviour
 {
-
+    [SerializeField] private GameObject display;
     [SerializeField] private Image[] relicsIconSlots;  // Pre-placed Image slots in UI
 
     private void OnEnable()
@@ -33,5 +33,10 @@ public class OwnedRelicsDisplay : MonoBehaviour
     private void OnDisable()
     {
         Data.OnRelicsChanged -= RefreshDisplay;
+    }
+
+    public void SetActiveDisplay(bool active)
+    {
+        display.SetActive(active);
     }
 }

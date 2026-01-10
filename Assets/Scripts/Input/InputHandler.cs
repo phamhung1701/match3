@@ -6,6 +6,7 @@ public class InputHandler : MonoBehaviour, Control.IPlayerActions
 {
     public event Action ClickEvent;
     public event Action PositionEvent;
+    public event Action PauseEvent;
 
     private Control control;
 
@@ -73,4 +74,12 @@ public class InputHandler : MonoBehaviour, Control.IPlayerActions
         return result;
     }
 
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.started)  
+        {
+            Debug.Log("ESC pressed - firing PauseEvent");
+            PauseEvent?.Invoke();
+        }
+    }
 }

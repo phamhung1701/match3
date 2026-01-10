@@ -66,6 +66,7 @@ public class Match3Skin : MonoBehaviour
 
     private void Awake()
     {
+        gamePanel.SetActive(false);
         mightText.color = new Color(0.5f, 0f, 0f);            // dark red-ish
         blessingText.color = new Color(0f, 0.8f, 0.6f);       // aquamarine-ish
         shardText.color = Color.yellow;                       // built-in

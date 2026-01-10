@@ -89,4 +89,9 @@ public class Shop : MonoBehaviour
         // TODO: Trigger next trial - call
         skin.StartNewGame();
     }
+
+    public void SetActiveShop(bool active)
+    {
+        shopPanel.SetActive(active);
+    }
 }
