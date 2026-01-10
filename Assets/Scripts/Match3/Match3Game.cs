@@ -34,6 +34,7 @@ public class Match3Game : MonoBehaviour
 
     private void SetRate()
     {
+        // Base rates
         might_rate = 0.18f;
         blessing_rate = 0.18f;
         shard_rate = 0.18f;
@@ -41,6 +42,18 @@ public class Match3Game : MonoBehaviour
         mirror_rate = 0.10f;
         totem_rate = 0.12f;
         blight_rate = 0.10f;
+
+        // Apply relic rate modifiers
+        might_rate += Data.Instance.GetMightRateBonus();
+        blessing_rate += Data.Instance.GetBlessingRateBonus();
+        shard_rate += Data.Instance.GetShardRateBonus();
+        fury_rate += Data.Instance.GetFuryRateBonus();
+        mirror_rate += Data.Instance.GetMirrorRateBonus();
+        totem_rate += Data.Instance.GetTotemRateBonus();
+        blight_rate -= Data.Instance.GetBlightRateReduction();
+
+        // Clamp rates to valid range
+        blight_rate = Mathf.Max(0f, blight_rate);
     }
 
 
@@ -72,7 +85,8 @@ public class Match3Game : MonoBehaviour
     private void ScaleRequiredScore(int cycle, int trial)
     {
         Debug.Log(cycle + " " + trial);
-        float baseScore = Mathf.Round(500 * Mathf.Pow(1.5f, cycle - 1) / 100) * 100;
+        // Rebalanced: Cycle 1 starts at 200, grows more gradually
+        float baseScore = Mathf.Round(200 * Mathf.Pow(1.75f, cycle - 1) / 50) * 50;
         RequireScore = baseScore * (0.5f * trial + 0.5f);
     }
 
@@ -92,19 +106,20 @@ public class Match3Game : MonoBehaviour
 
     public void StartNewGame()
     {
-        flow = 4;
-        whirl = 3;
+        // Base resources + relic bonuses
+        flow = 4 + Data.Instance.GetBonusFlow();
+        whirl = 3 + Data.Instance.GetBonusWhirl();
         TotalScore = 0;
         ScaleRequiredScore(cycle, trial);
         Might = 0;
         Blessing = 0;
 
-        if (shop.RelicNumber != 0)
-        {
-            // Relic effect
-            Might += Data.Instance.GetTotalBonusMight();
-            Blessing += Data.Instance.GetTotalBonusBlessing();
-        }
+        // Apply relic stat bonuses
+        Might += Data.Instance.GetTotalBonusMight();
+        Blessing += Data.Instance.GetTotalBonusBlessing();
+
+        // Starting shards bonus
+        Data.Instance.Shard += Data.Instance.GetStartingShards();
 
         if (grid.IsUndefined)
         {
@@ -370,6 +385,26 @@ public class Match3Game : MonoBehaviour
         ClearedTileCoordinates.Clear();
         Scores.Clear();
 
+        // Get relic bonuses once
+        float mightMult = Data.Instance.GetMightAmountMult();
+        float blessingMult = Data.Instance.GetBlessingAmountMult();
+        float shardMult = Data.Instance.GetShardAmountMult();
+        float furyBoost = Data.Instance.GetFuryMultBonus();
+        float mirrorBoost = Data.Instance.GetMirrorMultBonus();
+        float totemMight = Data.Instance.GetTotemMightBonus();
+        float totemBlessing = Data.Instance.GetTotemBlessingBonus();
+        float lengthBonus = Data.Instance.GetMatchLengthBonus();
+        float cascadeMight = Data.Instance.GetCascadeMightBonus();
+        float cascadeBlessing = Data.Instance.GetCascadeBlessingBonus();
+        float comboBonus = Data.Instance.GetComboMultBonus();
+
+        // Apply cascade bonuses (for matches beyond first)
+        if (scoreMultiplier > 1)
+        {
+            Might += cascadeMight * (scoreMultiplier - 1);
+            Blessing += cascadeBlessing * (scoreMultiplier - 1);
+        }
+
         for (int m = 0; m < matches.Count; m++)
         {
             Match match = matches[m];
@@ -381,47 +416,71 @@ public class Match3Game : MonoBehaviour
             float floating;
             int shardCount;
 
+            // Match length bonus (tiles over 3)
+            float lengthExtra = (match.length > 3) ? lengthBonus * (match.length - 3) : 0;
+
+            // Combo multiplier bonus
+            float comboMult = 1f + comboBonus * (scoreMultiplier - 1);
+
             switch (tile)
             {
                 case TileState.Might:
                     color = Color.red;
-                    floating = 10 * match.length * scoreMultiplier++;
+                    // Rebalanced: 5 base (was 10)
+                    floating = (5 * match.length + lengthExtra) * scoreMultiplier * mightMult * comboMult;
+                    scoreMultiplier++;
                     Might += floating;
                     floatScore(match, step, color, floating);
                     break;
                 case TileState.Blessing:
                     color = Color.cyan;
-                    floating = match.length * scoreMultiplier++;
+                    // Rebalanced: 2 base (was 1)
+                    floating = (2 * match.length + lengthExtra) * scoreMultiplier * blessingMult * comboMult;
+                    scoreMultiplier++;
                     Blessing += floating;
                     floatScore(match, step, color, floating);
                     break;
                 case TileState.Shard:
                     color = Color.yellow;
-                    shardCount = match.length * scoreMultiplier++;
+                    shardCount = Mathf.RoundToInt((match.length + lengthExtra) * scoreMultiplier * shardMult * comboMult);
+                    scoreMultiplier++;
                     Data.Instance.Shard += shardCount;
                     floatScore(match, step, color, shardCount);
                     break;
                 case TileState.Fury:
                     color = Color.green;
-                    floating = 1 + 0.1f * match.length * scoreMultiplier++;
+                    // Rebalanced: 0.05 base mult (was 0.1)
+                    floating = 1 + (0.05f + furyBoost) * match.length * scoreMultiplier;
+                    scoreMultiplier++;
                     Might *= floating;
                     floatScore(match, step, color, floating);
                     break;
                 case TileState.Mirror:
                     color = Color.magenta;
-                    floating = match.length * scoreMultiplier++;
+                    // Rebalanced: Same formula as Fury (was length * mult)
+                    floating = 1 + (0.1f + mirrorBoost) * match.length * scoreMultiplier;
+                    scoreMultiplier++;
                     Blessing *= floating;
                     floatScore(match, step, color, floating);
                     break;
                 case TileState.Totem:
                     color = Color.white;
+                    // Totem passive from relics
+                    if (totemMight > 0 || totemBlessing > 0)
+                    {
+                        Might += totemMight * match.length;
+                        Blessing += totemBlessing * match.length;
+                        floatScore(match, step, color, totemMight * match.length);
+                    }
                     break;
                 case TileState.Blight:
                     color = Color.black;
-                    floating = -(match.length * scoreMultiplier++);
-                    Might /= -floating;
+                    // Rebalanced: Less punishing
+                    floating = match.length * scoreMultiplier;
+                    scoreMultiplier++;
+                    Might = Mathf.Max(Might - floating * 2, 0);
                     Blessing = Mathf.Max(Blessing - floating, 0);
-                    floatScore(match, step, color, floating);
+                    floatScore(match, step, color, -floating);
                     break;
                 default:
                     Debug.Log("Unknown tile type");
