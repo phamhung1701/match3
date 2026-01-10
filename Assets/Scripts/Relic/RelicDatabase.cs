@@ -27,4 +27,16 @@ public class RelicDatabase : ScriptableObject
         // TODO: Return first 'count' items using GetRange
         return shuffled.GetRange(0, count);
     }
+
+    public RelicData GetRelicByName(string name)
+    {
+        foreach (RelicData relic in allRelics)
+        {
+            if (relic.relicName == name)
+            {
+                return relic;
+            }
+        }
+        return null;
+    }
 }

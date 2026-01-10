@@ -1147,6 +1147,7 @@ MonoBehaviour:
   - {fileID: 8634059844502021178, guid: b0d6a89d0c2499742a2587ffc7b1f0fa, type: 3}
   - {fileID: 4724084869443349003, guid: 641e66dcb8264da4690d53b8cc32f69d, type: 3}
   game: {fileID: 96844176}
+  relicDatabase: {fileID: 0}
   dragThreshold: 0.5
   tileSwapper:
     duration: 0.25
@@ -5547,7 +5548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1126234027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5560,7 +5561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20745f8feb4d0e34ca627c8fa1e9e5c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 1126234026}
+  pauseMenu: {fileID: 1146609431}
   resumeButton: {fileID: 357334125}
   restartButton: {fileID: 347988065}
   backToMenuButton: {fileID: 1941363554}
@@ -5603,7 +5604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1146609432
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8354,6 +8355,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skin: {fileID: 96844177}
+  game: {fileID: 96844176}
+  relicDatabase: {fileID: 0}
   relicsDisplay: {fileID: 1611422273}
   startButton: {fileID: 252707475}
   quitButton: {fileID: 617865767}

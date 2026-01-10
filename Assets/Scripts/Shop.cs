@@ -19,6 +19,7 @@ public class Shop : MonoBehaviour
     [SerializeField] Button rerollButton;
 
     [SerializeField] Match3Skin skin;
+    [SerializeField] Match3Game game;
     private List<RelicData> currentShop;
     private int rerollPrice;
 
@@ -86,7 +87,10 @@ public class Shop : MonoBehaviour
         //Hide shop panel
         shopPanel.SetActive(false);
 
-        // TODO: Trigger next trial - call
+        // Save when leaving shop (entering gameplay)
+        SaveManager.SaveGame(game, relicDatabase, false);
+
+        // Start next trial
         skin.StartNewGame();
     }
 

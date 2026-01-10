@@ -66,8 +66,15 @@ public class PauseMenuUI : MonoBehaviour
 
     private void OnBackToMenuClicked()
     {
+        isPause = false;
         pauseMenu.SetActive(false);
         Time.timeScale = 1;
+        
+        // Hide all game UI
+        skin.GamePanel(false);
+        shop.SetActiveShop(false);
+        relicsDisplay.SetActiveDisplay(false);
+        
         startMenuUI.SetActiveStartMenu(true);
     }
 }

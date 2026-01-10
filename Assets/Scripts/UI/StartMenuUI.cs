@@ -4,6 +4,9 @@ using UnityEngine.UI;
 public class StartMenuUI : MonoBehaviour
 {
     [SerializeField] private Match3Skin skin;
+    [SerializeField] private Match3Game game;
+    [SerializeField] private Shop shop;
+    [SerializeField] private RelicDatabase relicDatabase;
     [SerializeField] private OwnedRelicsDisplay relicsDisplay;
     [SerializeField] private Button startButton;
     [SerializeField] private Button quitButton;
@@ -17,18 +20,65 @@ public class StartMenuUI : MonoBehaviour
         continueButton.onClick.AddListener(OnContinueClicked);
     }
 
+    private void Start()
+    {
+        // Enable/disable Continue button based on save file existence
+        continueButton.interactable = SaveManager.HasSaveFile();
+    }
+
     private void OnStartClicked()
     {
+        // Delete old save when starting new game
+        SaveManager.DeleteSave();
+        
         startGameObject.SetActive(false);
-        skin.GamePanel(true);
+        skin.RestartGame();
         relicsDisplay.SetActiveDisplay(true);
     }
 
     private void OnContinueClicked()
     {
-        OnStartClicked();
+        SaveData saveData = SaveManager.LoadGame();
+        if (saveData == null)
+        {
+            Debug.LogError("Failed to load save data");
+            return;
+        }
 
-        //TODO: Load file save
+        // Apply saved data
+        Data.Instance.Shard = saveData.shards;
+        game.cycle = saveData.cycle;
+        game.trial = saveData.trial;
+        shop.RelicNumber = saveData.relicNames.Count;
+
+        // Restore relics from names
+        Data.Instance.relics.Clear();
+        foreach (string relicName in saveData.relicNames)
+        {
+            RelicData relic = relicDatabase.GetRelicByName(relicName);
+            if (relic != null)
+            {
+                Data.Instance.relics.Add(relic);
+            }
+        }
+
+        startGameObject.SetActive(false);
+        relicsDisplay.SetActiveDisplay(true);
+        Data.OnRelicsChanged?.Invoke();
+
+        // Restore to correct state
+        if (saveData.isInShop)
+        {
+            // Return to shop
+            skin.GamePanel(false);
+            shop.OpenShop();
+        }
+        else
+        {
+            // Return to gameplay
+            skin.GamePanel(true);
+            skin.StartNewGame();
+        }
     }
 
     private void OnQuitClicked()
@@ -39,5 +89,9 @@ public class StartMenuUI : MonoBehaviour
     public void SetActiveStartMenu(bool active)
     {
         startGameObject.SetActive(active);
+        if (active)
+        {
+            continueButton.interactable = SaveManager.HasSaveFile();
+        }
     }
 }

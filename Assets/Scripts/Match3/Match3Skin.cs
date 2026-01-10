@@ -30,6 +30,9 @@ public class Match3Skin : MonoBehaviour
     [SerializeField]
     Match3Game game;
 
+    [SerializeField]
+    RelicDatabase relicDatabase;
+
     [SerializeField, Range(0.1f, 1f)]
     float dragThreshold = 0.5f;
 
@@ -280,6 +283,10 @@ public class Match3Skin : MonoBehaviour
         {
             ResetUI();
             gamePanel.SetActive(false);
+            
+            // Auto-save after completing trial (player entering shop)
+            SaveManager.SaveGame(game, relicDatabase, true);
+            
             shop.OpenShop();
         }
         totalScoreText.SetText("Strike: {0}", game.TotalScore);
