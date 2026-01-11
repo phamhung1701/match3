@@ -25,6 +25,12 @@ public class Data : MonoBehaviour
         OnRelicsChanged?.Invoke();
     }
 
+    public void removeRelic(RelicData data)
+    {
+        relics.Remove(data);
+        OnRelicsChanged?.Invoke();
+    }
+
     private void Awake()
     {
         if (Instance == null)

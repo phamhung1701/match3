@@ -12,9 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Crimson Ember
   m_EditorClassIdentifier: 
-  relicName: Might Stone
-  description: +50 Might at the start of the trial
-  icon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
-  price: 5
+  relicName: Crimson Ember
+  description: Gain +10 Might at the start of each trial
+  icon: {fileID: 5906189787541610263, guid: 03f3b1d8eeeb8ff4591af623f1199721, type: 3}
+  price: 10
+  bonusMight: 10
   bonusBlessing: 0
-  bonusMight: 50
+  mightRateBonus: 0
+  blessingRateBonus: 0
+  shardRateBonus: 0
+  furyRateBonus: 0
+  mirrorRateBonus: 0
+  totemRateBonus: 0
+  blightRateReduction: 0
+  mightAmountMult: 1
+  blessingAmountMult: 1
+  shardAmountMult: 1
+  furyMultBonus: 0
+  mirrorMultBonus: 0
+  totemMightBonus: 0
+  totemBlessingBonus: 0
+  bonusFlow: 0
+  bonusWhirl: 0
+  startingShards: 0
+  comboMultBonus: 0
+  cascadeMightBonus: 0
+  cascadeBlessingBonus: 0
+  matchLengthBonus: 0

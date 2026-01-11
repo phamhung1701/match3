@@ -168,14 +168,8 @@ public class Match3Skin : MonoBehaviour
         _isPlaying = true;
         gamePanel.SetActive(true);
         busyDuration = 0f;
-        totalScoreText.SetText("Total: 0");
         game.StartNewGame();
         requiredText.SetText("Required: "+ game.RequireScore);
-        shardText.SetText("Shard: {0}", game.Shard);
-        flowText.SetText("Flow: {0}", game.flow);
-        whirlText.SetText("Whirl: {0}", game.whirl);
-        mightText.SetText("Might: {0}", game.Might);
-        blessingText.SetText("Blessing {0}", game.Blessing);
         tileOffset = -0.5f * (float2)(game.Size - 1);
         if (tiles.IsUndefined)
         {
@@ -318,6 +312,8 @@ public class Match3Skin : MonoBehaviour
         mightText.SetText("Might: " + FormatSmart(game.Might));
         blessingText.SetText("Blessing: " + FormatSmart(game.Blessing));
         shardText.SetText("Shard: {0}", Data.Instance.Shard);
+        flowText.SetText("Flow: {0}", game.flow);
+        whirlText.SetText("Whirl: {0}", game.whirl);
     }
 
     public void GamePanel(bool status)

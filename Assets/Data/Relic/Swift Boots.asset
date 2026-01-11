@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Swift Boots
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Swift Boots
+  description: Gain +1 additional flow per trial
+  icon: {fileID: 7978774861938890465, guid: c20352bea1023c643a2a3d9c17c2745b, type: 3}
+  price: 20
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
   mirrorMultBonus: 0
   totemMightBonus: 0
   totemBlessingBonus: 0
-  bonusFlow: 0
+  bonusFlow: 1
   bonusWhirl: 0
   startingShards: 0
   comboMultBonus: 0

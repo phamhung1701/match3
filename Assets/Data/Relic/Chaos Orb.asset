@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicName: Chaos Orb
   description: Gain +1 additional whirl per trial
-  icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
+  icon: {fileID: 8609402546668884636, guid: dc5578f5115b40947a2ce305d0a42424, type: 3}
   price: 15
   bonusMight: 0
   bonusBlessing: 0

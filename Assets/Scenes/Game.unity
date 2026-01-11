@@ -3056,6 +3056,7 @@ MonoBehaviour:
   proceedButton: {fileID: 485370840}
   rerollButton: {fileID: 1736802543}
   skin: {fileID: 96844177}
+  game: {fileID: 96844176}
 --- !u!1 &554634995
 GameObject:
   m_ObjectHideFlags: 0
@@ -8356,7 +8357,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skin: {fileID: 96844177}
   game: {fileID: 96844176}
-  relicDatabase: {fileID: 0}
+  shop: {fileID: 543372115}
+  relicDatabase: {fileID: 11400000, guid: 458c437e10b508344a874e0d2f5ac609, type: 2}
   relicsDisplay: {fileID: 1611422273}
   startButton: {fileID: 252707475}
   quitButton: {fileID: 617865767}

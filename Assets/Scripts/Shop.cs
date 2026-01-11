@@ -98,4 +98,15 @@ public class Shop : MonoBehaviour
     {
         shopPanel.SetActive(active);
     }
+
+    public bool IsShopOpen => shopPanel.activeSelf;
+
+    public void SellRelic(RelicData relic)
+    {
+        int sellPrice = relic.price / 2;
+        Data.Instance.Shard += sellPrice;
+        Data.Instance.removeRelic(relic);
+        RelicNumber--;
+        shardText.SetText("Shards: {0}", Data.Instance.Shard);
+    }
 }
