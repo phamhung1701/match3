@@ -515,9 +515,10 @@ public class Match3Game : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameOverUI gameOverUI;
 
-    public bool Cast()
+    // Returns: 1 = passed, -1 = game over, 0 = continue
+    public int Cast()
     {
-        TotalScore = Might * Blessing;
+        TotalScore += Might * Blessing;  // Accumulate score
         if (TotalScore > RequireScore)
         {
             if (trial == 3)
@@ -528,15 +529,19 @@ public class Match3Game : MonoBehaviour
             else trial++;
             Data.Instance.Shard += flow * 2 + whirl;
             ScaleRequiredScore(cycle, trial);
-            return true;
+            return 1; // Passed
         }
         if (flow == 0 && TotalScore < RequireScore)
         {
-            gameOver.SetActive(true);
-            gameOverUI.ShowGameOver(TotalScore, cycle, trial);
-            return false;
+            return -1; // Game Over
         }
-        return false;
+        return 0; // Continue playing
+    }
+
+    public void ResetMightBlessing()
+    {
+        Might = 0;
+        Blessing = 0;
     }
 
     public void DropTiles()

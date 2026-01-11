@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Mathematics;
+using System.Collections;
 
 using static Unity.Mathematics.math;
 using TMPro;
@@ -45,6 +46,14 @@ public class Match3Skin : MonoBehaviour
     float busyDuration;
 
     float floatingScoreZ;
+
+    // Score animation
+    private float displayedScore = 0f;
+    private float displayedMight = 0f;
+    private float displayedBlessing = 0f;
+    private Coroutine scoreAnimCoroutine;
+    private Coroutine mightAnimCoroutine;
+    private Coroutine blessingAnimCoroutine;
 
     [SerializeField]
     TextMeshPro totalScoreText;
@@ -168,8 +177,10 @@ public class Match3Skin : MonoBehaviour
         _isPlaying = true;
         gamePanel.SetActive(true);
         busyDuration = 0f;
+        displayedScore = 0f;  // Reset for new game
         game.StartNewGame();
         requiredText.SetText("Required: "+ game.RequireScore);
+        ResetUI();
         tileOffset = -0.5f * (float2)(game.Size - 1);
         if (tiles.IsUndefined)
         {
@@ -275,17 +286,49 @@ public class Match3Skin : MonoBehaviour
 
     public void Cast()
     {
-        if (game.Cast())
+        int result = game.Cast();
+        
+        // Animate score up, might and blessing down to 0
+        AnimateScoreTo(game.TotalScore);
+        AnimateMightTo(0);
+        AnimateBlessingTo(0);
+        
+        // Reset actual game values after cast
+        game.ResetMightBlessing();
+        
+        if (result == 1) // Passed
         {
-            ResetUI();
-            gamePanel.SetActive(false);
-            
-            // Auto-save after completing trial (player entering shop)
-            SaveManager.SaveGame(game, relicDatabase, true);
-            
-            shop.OpenShop();
+            // Wait for animation before opening shop
+            StartCoroutine(OpenShopAfterDelay());
         }
-        totalScoreText.SetText("Strike: {0}", game.TotalScore);
+        else if (result == -1) // Game Over
+        {
+            // Wait for animation before showing game over
+            StartCoroutine(ShowGameOverAfterDelay());
+        }
+    }
+
+    private IEnumerator ShowGameOverAfterDelay()
+    {
+        // Wait for score animation (1s) + extra viewing time (1.5s)
+        yield return new WaitForSeconds(2.5f);
+        
+        gameOver.SetActive(true);
+        gameOverUI.ShowGameOver(game.TotalScore, game.cycle, game.trial);
+    }
+
+    private IEnumerator OpenShopAfterDelay()
+    {
+        // Wait for score animation (1s) + extra viewing time (1.5s)
+        yield return new WaitForSeconds(2.5f);
+        
+        ResetUI();
+        gamePanel.SetActive(false);
+        
+        // Auto-save after completing trial (player entering shop)
+        SaveManager.SaveGame(game, relicDatabase, true);
+        
+        shop.OpenShop();
     }
 
     public void Proceed()
@@ -308,12 +351,106 @@ public class Match3Skin : MonoBehaviour
 
     private void ResetUI()
     {
-        totalScoreText.SetText("Strike: {0}", game.TotalScore);
+        // Animate score count-up
+        AnimateScoreTo(game.TotalScore);
+        
+        // Sync displayed values with actual game values
+        displayedMight = game.Might;
+        displayedBlessing = game.Blessing;
+        
         mightText.SetText("Might: " + FormatSmart(game.Might));
         blessingText.SetText("Blessing: " + FormatSmart(game.Blessing));
         shardText.SetText("Shard: {0}", Data.Instance.Shard);
         flowText.SetText("Flow: {0}", game.flow);
         whirlText.SetText("Whirl: {0}", game.whirl);
+    }
+
+    private void AnimateScoreTo(float targetScore)
+    {
+        if (scoreAnimCoroutine != null)
+        {
+            StopCoroutine(scoreAnimCoroutine);
+        }
+        scoreAnimCoroutine = StartCoroutine(AnimateScoreCoroutine(targetScore));
+    }
+
+    private IEnumerator AnimateScoreCoroutine(float targetScore)
+    {
+        float startScore = displayedScore;
+        float duration = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            // Ease out for smooth deceleration
+            t = 1f - (1f - t) * (1f - t);
+            displayedScore = Mathf.Lerp(startScore, targetScore, t);
+            totalScoreText.SetText("Strike: {0}", Mathf.RoundToInt(displayedScore));
+            yield return null;
+        }
+
+        displayedScore = targetScore;
+        totalScoreText.SetText("Strike: {0}", Mathf.RoundToInt(displayedScore));
+    }
+
+    private void AnimateMightTo(float targetMight)
+    {
+        if (mightAnimCoroutine != null)
+        {
+            StopCoroutine(mightAnimCoroutine);
+        }
+        mightAnimCoroutine = StartCoroutine(AnimateMightCoroutine(targetMight));
+    }
+
+    private IEnumerator AnimateMightCoroutine(float targetMight)
+    {
+        float startMight = displayedMight;
+        float duration = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            t = 1f - (1f - t) * (1f - t);
+            displayedMight = Mathf.Lerp(startMight, targetMight, t);
+            mightText.SetText("Might: " + FormatSmart(displayedMight));
+            yield return null;
+        }
+
+        displayedMight = targetMight;
+        mightText.SetText("Might: " + FormatSmart(displayedMight));
+    }
+
+    private void AnimateBlessingTo(float targetBlessing)
+    {
+        if (blessingAnimCoroutine != null)
+        {
+            StopCoroutine(blessingAnimCoroutine);
+        }
+        blessingAnimCoroutine = StartCoroutine(AnimateBlessingCoroutine(targetBlessing));
+    }
+
+    private IEnumerator AnimateBlessingCoroutine(float targetBlessing)
+    {
+        float startBlessing = displayedBlessing;
+        float duration = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            t = 1f - (1f - t) * (1f - t);
+            displayedBlessing = Mathf.Lerp(startBlessing, targetBlessing, t);
+            blessingText.SetText("Blessing: " + FormatSmart(displayedBlessing));
+            yield return null;
+        }
+
+        displayedBlessing = targetBlessing;
+        blessingText.SetText("Blessing: " + FormatSmart(displayedBlessing));
     }
 
     public void GamePanel(bool status)
