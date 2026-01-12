@@ -2,6 +2,8 @@
 
 A strategic Match-3 game with roguelite progression, built in Unity.
 
+*Last updated: January 2026*
+
 ## Overview
 
 Braed combines puzzle mechanics with resource management and roguelite elements. Match tiles to accumulate Might and Blessing, then cast to convert them into score. Progress through increasingly difficult Cycles and Trials while collecting powerful Relics.
