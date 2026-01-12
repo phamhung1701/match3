@@ -2,7 +2,7 @@
 
 A strategic Match-3 game with roguelite progression, built in Unity.
 
-*Last updated: January 2026*
+*Last updated: January 12, 2026*
 
 ## Overview
 
