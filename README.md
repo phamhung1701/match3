@@ -1,36 +1,55 @@
-# Braed - Match3
+# Braed
 
-**Braed** is a unique Match-3 strategy game that blends puzzle mechanics with roguelite. Players must match tiles to gather resources, cast powerful spells, and overcome increasing difficulties through Cycles and Trials.
+A strategic Match-3 game with roguelite progression, built in Unity.
 
-## 🎮 Game Mechanics
+## Overview
 
-### Tiles & Resources
-The game features 7 distinct tile types, each interacting with your core stats:
-- **❤️ Might** (Red): Increases your raw power.
-- **✨ Blessing** (Cyan): Multiplies your effectiveness.
-- **💎 Shard** (Yellow): Currency for the shop/upgrades.
-- **🌿 Fury** (Green): Multiplies your Might.
-- **🔮 Mirror** (Magenta): Multiplies your Blessing.
-- **🗿 Totem** (White): (Functionality to be discovered/implemented).
-- **☣️ Blight** (Black): A hazardous tile that reduces Might and Blessing. Must be managed carefully!
+Braed combines puzzle mechanics with resource management and roguelite elements. Match tiles to accumulate Might and Blessing, then cast to convert them into score. Progress through increasingly difficult Cycles and Trials while collecting powerful Relics.
 
-### Progression System
-- **Cycles & Trials**: Progress through increasingly difficult stages.
-- **Score Requirement**: To pass a level, you must accumulate enough **Total Score** (Calculated as `Might * Blessing`) to meet the `RequireScore`.
-- **Flow & Whirl**: Manage your turn counters to optimize your board state before casting.
+## Core Mechanics
 
-### Gameplay Loop
-1.  **Match Tiles**: Swap tiles to create linear matches of 3 or more.
-2.  **Gather Stats**: Accumulate Might, Blessing, and Shards.
-3.  **Cast**: Trigger the `Cast()` ability to calculate your Total Score (`Might * Blessing`).
-4.  **Advance**: If your score exceeds the requirement, you advance to the next Trial or Cycle.
+### Tiles
 
-## 🛠️ Project Structure
+| Tile | Effect |
+|------|--------|
+| Might | Increases raw power |
+| Blessing | Multiplies effectiveness |
+| Shard | Currency for shop purchases |
+| Fury | Multiplies Might gains |
+| Mirror | Multiplies Blessing gains |
+| Totem | Grants passive bonuses |
+| Blight | Reduces Might and Blessing |
 
-- `Assets/Scripts/Match3/`: Core game logic including board state (`Match3Game.cs`), matching algorithms (`Match.cs`), and skin definitions.
-- `Assets/Scripts/Tile/`: Tile definitions and behaviors.
-- `Assets/Scripts/Relic/`: System for game-enhancing items (Relics).
-- `Assets/Scenes/`:
-  - `Menu`: Main entry point.
-  - `Game`: The core gameplay loop.
-  - `Shop`: Upgrade and item interface.
+### Progression
+
+- **Score Calculation**: Total Score = Σ(Might × Blessing) across all casts
+- **Trials**: Complete 3 trials per cycle
+- **Cycles**: Difficulty scales with each cycle
+- **Shop**: Purchase relics between trials using Shards
+
+### Resources
+
+- **Flow**: Number of tile swaps per trial
+- **Whirl**: Board shuffle uses
+
+## Project Structure
+
+```
+Assets/
+├── Scripts/
+│   ├── Match3/       # Core game logic
+│   ├── Relic/        # Relic system
+│   ├── Shop.cs       # Shop mechanics
+│   ├── Save/         # Save/Load system
+│   └── UI/           # UI controllers
+├── Data/
+│   └── Relic/        # Relic ScriptableObjects
+└── Scenes/
+    ├── Menu
+    └── Game
+```
+
+## Requirements
+
+- Unity 2022.3 LTS or later
+- TextMeshPro package
