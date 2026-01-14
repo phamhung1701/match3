@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Abstract base for all relics.
-/// Every relic must inherit and implement ApplyEffect.
+/// Static configuration for a relic.
+/// Contains effect behaviors that are applied via RelicInstance.
 /// </summary>
-public abstract class RelicData : ScriptableObject
+[CreateAssetMenu(menuName = "Braed/Relic")]
+public class RelicData : ScriptableObject
 {
     [Header("Basic Info")]
     public string relicName;
@@ -13,9 +15,15 @@ public abstract class RelicData : ScriptableObject
     public Sprite icon;
     public int price;
     
+    [Header("Effects")]
+    [Tooltip("List of effect behaviors this relic applies")]
+    public List<EffectBehavior> effects = new List<EffectBehavior>();
+    
     /// <summary>
-    /// Apply this relic's effects to the modifiers.
-    /// Must be implemented by each relic subclass.
+    /// Create a runtime instance of this relic.
     /// </summary>
-    public abstract void ApplyEffect(GameContext context, ref GameModifiers mods);
+    public RelicInstance CreateInstance()
+    {
+        return new RelicInstance(this);
+    }
 }

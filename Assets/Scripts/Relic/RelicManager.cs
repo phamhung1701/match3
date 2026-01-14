@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Manages all owned relics. Handles add, remove, sell, and effect application.
+/// Manages all owned relic instances.
+/// Handles add, remove, sell, and effect application.
 /// </summary>
 public class RelicManager : MonoBehaviour
 {
@@ -11,9 +12,9 @@ public class RelicManager : MonoBehaviour
     
     [SerializeField] private int maxSlots = 5;
     
-    private List<RelicData> ownedRelics = new List<RelicData>();
+    private List<RelicInstance> ownedRelics = new List<RelicInstance>();
     
-    public IReadOnlyList<RelicData> OwnedRelics => ownedRelics;
+    public IReadOnlyList<RelicInstance> OwnedRelics => ownedRelics;
     public int MaxSlots => maxSlots;
     public int CurrentCount => ownedRelics.Count;
     public bool HasSpace => ownedRelics.Count < maxSlots;
@@ -33,27 +34,38 @@ public class RelicManager : MonoBehaviour
         }
     }
     
-    public void AddRelic(RelicData relic)
+    /// <summary>
+    /// Add a relic by creating an instance from data.
+    /// </summary>
+    public RelicInstance AddRelic(RelicData data)
     {
-        if (relic == null) return;
+        if (data == null) return null;
         if (!HasSpace)
         {
             Debug.LogWarning("No space for new relic!");
-            return;
+            return null;
         }
         
-        ownedRelics.Add(relic);
+        var instance = data.CreateInstance();
+        ownedRelics.Add(instance);
         OnRelicsChanged?.Invoke();
+        return instance;
     }
     
-    public void RemoveRelic(RelicData relic)
+    /// <summary>
+    /// Remove a relic instance.
+    /// </summary>
+    public void RemoveRelic(RelicInstance instance)
     {
-        if (ownedRelics.Remove(relic))
+        if (ownedRelics.Remove(instance))
         {
             OnRelicsChanged?.Invoke();
         }
     }
     
+    /// <summary>
+    /// Remove relic at index.
+    /// </summary>
     public void RemoveRelicAt(int index)
     {
         if (index >= 0 && index < ownedRelics.Count)
@@ -63,7 +75,10 @@ public class RelicManager : MonoBehaviour
         }
     }
     
-    public RelicData GetRelicAt(int index)
+    /// <summary>
+    /// Get relic instance at index.
+    /// </summary>
+    public RelicInstance GetRelicAt(int index)
     {
         if (index >= 0 && index < ownedRelics.Count)
         {
@@ -72,42 +87,73 @@ public class RelicManager : MonoBehaviour
         return null;
     }
     
+    /// <summary>
+    /// Get relic data at index (for UI display).
+    /// </summary>
+    public RelicData GetRelicDataAt(int index)
+    {
+        return GetRelicAt(index)?.Data;
+    }
+    
+    /// <summary>
+    /// Clear all relics.
+    /// </summary>
     public void ClearAllRelics()
     {
         ownedRelics.Clear();
         OnRelicsChanged?.Invoke();
     }
     
+    /// <summary>
+    /// Expand slot limit.
+    /// </summary>
     public void ExpandSlots(int amount)
     {
         maxSlots += amount;
     }
     
     /// <summary>
-    /// Apply all relic effects to the modifiers.
+    /// Apply all relic effects.
     /// Called by EffectSystem.
     /// </summary>
     public void ApplyEffects(GameContext context, ref GameModifiers mods)
     {
-        foreach (var relic in ownedRelics)
+        foreach (var instance in ownedRelics)
         {
-            if (relic != null)
-            {
-                relic.ApplyEffect(context, ref mods);
-            }
+            instance.ApplyEffects(context, ref mods);
         }
     }
     
     /// <summary>
-    /// Load relics from save data.
+    /// Called at end of turn for all relics.
     /// </summary>
-    public void LoadRelics(List<RelicData> relics)
+    public void OnTurnEnd()
     {
-        ownedRelics.Clear();
-        if (relics != null)
+        foreach (var instance in ownedRelics)
         {
-            ownedRelics.AddRange(relics);
+            instance.OnTurnEnd();
         }
-        OnRelicsChanged?.Invoke();
+    }
+    
+    /// <summary>
+    /// Called when a match is made.
+    /// </summary>
+    public void OnMatchMade()
+    {
+        foreach (var instance in ownedRelics)
+        {
+            instance.OnMatchMade();
+        }
+    }
+    
+    /// <summary>
+    /// Reset all relics for new trial.
+    /// </summary>
+    public void ResetForNewTrial()
+    {
+        foreach (var instance in ownedRelics)
+        {
+            instance.ResetForNewTrial();
+        }
     }
 }

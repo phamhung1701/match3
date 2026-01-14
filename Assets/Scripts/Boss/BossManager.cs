@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Manages current boss. Handles selection, clearing, and effect application.
+/// Manages current boss instance.
+/// Handles selection, clearing, and effect application.
 /// </summary>
 public class BossManager : MonoBehaviour
 {
@@ -10,10 +11,10 @@ public class BossManager : MonoBehaviour
     
     [SerializeField] private BossDatabase bossDatabase;
     
-    public BossData CurrentBoss { get; private set; }
+    public BossInstance CurrentBoss { get; private set; }
     public bool HasBoss => CurrentBoss != null;
     
-    public event Action<BossData> OnBossSelected;
+    public event Action<BossInstance> OnBossSelected;
     public event Action OnBossCleared;
     
     private void Awake()
@@ -30,8 +31,7 @@ public class BossManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Select a random boss valid for the current cycle.
-    /// Called when entering Trial 3.
+    /// Select a random boss for the current cycle.
     /// </summary>
     public void SelectBossForCycle(int cycle)
     {
@@ -41,17 +41,16 @@ public class BossManager : MonoBehaviour
             return;
         }
         
-        CurrentBoss = bossDatabase.GetBossForCycle(cycle);
-        
-        if (CurrentBoss != null)
+        BossData data = bossDatabase.GetBossForCycle(cycle);
+        if (data != null)
         {
+            CurrentBoss = data.CreateInstance();
             OnBossSelected?.Invoke(CurrentBoss);
         }
     }
     
     /// <summary>
     /// Clear current boss.
-    /// Called when not in Trial 3.
     /// </summary>
     public void ClearBoss()
     {
@@ -86,18 +85,26 @@ public class BossManager : MonoBehaviour
     public float GetScoreMultiplier()
     {
         if (CurrentBoss == null || bossDatabase == null) return 1f;
-        return bossDatabase.GetScoreMultiplier(CurrentBoss);
+        return bossDatabase.GetScoreMultiplier(CurrentBoss.Data);
     }
     
     /// <summary>
-    /// Apply boss effect to modifiers.
+    /// Apply boss effect.
     /// Called by EffectSystem.
     /// </summary>
     public void ApplyEffect(GameContext context, ref GameModifiers mods)
     {
         if (CurrentBoss != null)
         {
-            CurrentBoss.ApplyEffect(context, ref mods);
+            CurrentBoss.ApplyEffects(context, ref mods);
         }
+    }
+    
+    /// <summary>
+    /// Called at end of turn.
+    /// </summary>
+    public void OnTurnEnd()
+    {
+        CurrentBoss?.OnTurnEnd();
     }
 }

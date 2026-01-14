@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Abstract base for all bosses.
-/// Every boss must inherit and implement ApplyEffect.
+/// Static configuration for a boss.
+/// Contains effect behaviors that are applied via BossInstance.
 /// </summary>
-public abstract class BossData : ScriptableObject
+[CreateAssetMenu(menuName = "Braed/Boss")]
+public class BossData : ScriptableObject
 {
     [Header("Basic Info")]
     public string bossName;
@@ -16,7 +18,11 @@ public abstract class BossData : ScriptableObject
     public int minCycle = 1;
     
     [Header("Special")]
-    public bool differentModifier;  // 4x score multiplier (like Finality)
+    public bool differentModifier;  // 4x score multiplier (Finality boss)
+    
+    [Header("Effects")]
+    [Tooltip("List of effect behaviors this boss applies")]
+    public List<EffectBehavior> effects = new List<EffectBehavior>();
     
     /// <summary>
     /// Get the trial display name for this boss.
@@ -27,8 +33,10 @@ public abstract class BossData : ScriptableObject
     }
     
     /// <summary>
-    /// Apply this boss's effects to the modifiers.
-    /// Must be implemented by each boss subclass.
+    /// Create a runtime instance of this boss.
     /// </summary>
-    public abstract void ApplyEffect(GameContext context, ref GameModifiers mods);
+    public BossInstance CreateInstance()
+    {
+        return new BossInstance(this);
+    }
 }

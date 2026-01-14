@@ -50,6 +50,8 @@ public class GameContext
             game = game,
             currentMight = game.Might,
             currentBlessing = game.Blessing,
+            currentFlow = game.flow,
+            currentWhirl = game.whirl,
             cycle = game.cycle,
             trial = game.trial
         };
