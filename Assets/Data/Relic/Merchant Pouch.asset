@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Merchant Pouch
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Merchant's Pouch
+  description: Gain +10 Shards at the start of each trial
+  icon: {fileID: -5272241121889418570, guid: 4ab7f4ed9baad644584da72a9ee371f5, type: 3}
+  price: 15
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
   totemBlessingBonus: 0
   bonusFlow: 0
   bonusWhirl: 0
-  startingShards: 0
+  startingShards: 10
   comboMultBonus: 0
   cascadeMightBonus: 0
   cascadeBlessingBonus: 0

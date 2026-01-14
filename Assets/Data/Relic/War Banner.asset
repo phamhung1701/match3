@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: War Banner
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: War Banner
+  description: All Might gained from matches is multiplied by 1.2
+  icon: {fileID: -9161188019061428514, guid: 743afc041dd2ae642ac5f2af2326f4b5, type: 3}
+  price: 40
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
   mirrorRateBonus: 0
   totemRateBonus: 0
   blightRateReduction: 0
-  mightAmountMult: 1
+  mightAmountMult: 1.2
   blessingAmountMult: 1
   shardAmountMult: 1
   furyMultBonus: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Blight Wand
   m_EditorClassIdentifier: 
   relicName: Blight Wand
-  description: Blight tiles appear 50% less often on the board
+  description: Blight appears 25% less often on the board
   icon: {fileID: -5300687873476049552, guid: a47f70ef4af081245a919c32543c8dae, type: 3}
   price: 22
   bonusMight: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
   furyRateBonus: 0
   mirrorRateBonus: 0
   totemRateBonus: 0
-  blightRateReduction: 0.5
+  blightRateReduction: 0.25
   mightAmountMult: 1
   blessingAmountMult: 1
   shardAmountMult: 1

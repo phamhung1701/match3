@@ -90,6 +90,7 @@ public class OwnedRelicsDisplay : MonoBehaviour
         {
             RelicData relic = Data.Instance.relics[index];
             shop.SellRelic(relic);
+            
         }
     }
 

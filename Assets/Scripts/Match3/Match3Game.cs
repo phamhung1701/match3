@@ -32,6 +32,10 @@ public class Match3Game : MonoBehaviour
     public int cycle = 1;
     public int trial = 1;
 
+    // Boss System
+    [SerializeField] private BossDatabase bossDatabase;
+    public BossData currentBoss { get; private set; }
+
     private void SetRate()
     {
         // Base rates
@@ -52,8 +56,69 @@ public class Match3Game : MonoBehaviour
         totem_rate += Data.Instance.GetTotemRateBonus();
         blight_rate -= Data.Instance.GetBlightRateReduction();
 
+        // Apply boss effects (Trial 3 only)
+        if (trial == 3 && currentBoss != null)
+        {
+            ApplyBossEffectsToRates();
+        }
+
         // Clamp rates to valid range
         blight_rate = Mathf.Max(0f, blight_rate);
+    }
+
+    private void ApplyBossEffectsToRates()
+    {
+        foreach (BossEffect effect in currentBoss.effects)
+        {
+            switch (effect.type)
+            {
+                case BossEffectType.BlightRateBonus:
+                    blight_rate += effect.value;
+                    break;
+                case BossEffectType.MightRateReduction:
+                    might_rate -= effect.value;
+                    break;
+                case BossEffectType.BlessingRateReduction:
+                    blessing_rate -= effect.value;
+                    break;
+            }
+        }
+    }
+
+    private int GetBossEffectValue(BossEffectType type)
+    {
+        if (currentBoss == null) return 0;
+        foreach (BossEffect effect in currentBoss.effects)
+        {
+            if (effect.type == type)
+                return (int)effect.value;
+        }
+        return 0;
+    }
+
+    public string GetTrialName()
+    {
+        if (trial == 3 && currentBoss != null)
+        {
+            return currentBoss.GetTrialName();
+        }
+        
+        return trial switch
+        {
+            1 => "The Initiate's Trial",
+            2 => "The Adept's Trial",
+            _ => $"Trial {trial}"
+        };
+    }
+
+    public bool HasBossEffect(BossEffectType type)
+    {
+        if (currentBoss == null) return false;
+        foreach (BossEffect effect in currentBoss.effects)
+        {
+            if (effect.type == type) return true;
+        }
+        return false;
     }
 
 
@@ -88,6 +153,12 @@ public class Match3Game : MonoBehaviour
         // Rebalanced: Cycle 1 starts at 200, grows more gradually
         float baseScore = Mathf.Round(200 * Mathf.Pow(1.75f, cycle - 1) / 50) * 50;
         RequireScore = baseScore * (0.5f * trial + 0.5f);
+        
+        // Apply boss score multiplier for Trial 3
+        if (trial == 3 && currentBoss != null && bossDatabase != null)
+        {
+            RequireScore *= bossDatabase.GetScoreMultiplier(currentBoss);
+        }
     }
 
     public bool HasMatches => matches.Count > 0;
@@ -106,9 +177,27 @@ public class Match3Game : MonoBehaviour
 
     public void StartNewGame()
     {
+        // Select boss for Trial 3
+        if (trial == 3 && bossDatabase != null)
+        {
+            currentBoss = bossDatabase.GetBossForCycle(cycle);
+        }
+        else
+        {
+            currentBoss = null;
+        }
+        
         // Base resources + relic bonuses
         flow = 4 + Data.Instance.GetBonusFlow();
         whirl = 3 + Data.Instance.GetBonusWhirl();
+        
+        // Apply boss flow reduction
+        if (currentBoss != null)
+        {
+            flow -= GetBossEffectValue(BossEffectType.ReduceFlow);
+            flow = Mathf.Max(1, flow); // Minimum 1 flow
+        }
+        
         TotalScore = 0;
         ScaleRequiredScore(cycle, trial);
         Might = 0;

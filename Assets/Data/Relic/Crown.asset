@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Crown
   m_EditorClassIdentifier: 
   relicName: Crown
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  description: Gain +0.15x score multiplier for each cascade in a chain
+  icon: {fileID: -1378521658571115459, guid: f4ea96596ebab994c973d2427d296d49, type: 3}
+  price: 60
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0

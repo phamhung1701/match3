@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Blessed Rain
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Blessed Rain
+  description: Gain +30 Blessing for each consecutive cascade combo
+  icon: {fileID: 4584250754565021796, guid: d78e95621f562ab4687ad52a3871e978, type: 3}
+  price: 30
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -37,5 +37,5 @@ MonoBehaviour:
   startingShards: 0
   comboMultBonus: 0
   cascadeMightBonus: 0
-  cascadeBlessingBonus: 0
+  cascadeBlessingBonus: 30
   matchLengthBonus: 0

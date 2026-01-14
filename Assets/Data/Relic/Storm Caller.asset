@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Storm Caller
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Storm Caller
+  description: Gain +80 Might for each consecutive cascade combo
+  icon: {fileID: -1190429096737854512, guid: 9ded55e82cc0af949927bb5c0052ca1a, type: 3}
+  price: 30
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -36,6 +36,6 @@ MonoBehaviour:
   bonusWhirl: 0
   startingShards: 0
   comboMultBonus: 0
-  cascadeMightBonus: 0
+  cascadeMightBonus: 80
   cascadeBlessingBonus: 0
   matchLengthBonus: 0

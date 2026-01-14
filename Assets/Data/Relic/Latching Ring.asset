@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Latching Ring
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Latching Ring
+  description: Gain +3 bonus score for each tile beyond 3 in a match
+  icon: {fileID: -4393300872852479712, guid: c5703f79ebaeda74b9304cc59846014e, type: 3}
+  price: 28
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -38,4 +38,4 @@ MonoBehaviour:
   comboMultBonus: 0
   cascadeMightBonus: 0
   cascadeBlessingBonus: 0
-  matchLengthBonus: 0
+  matchLengthBonus: 3

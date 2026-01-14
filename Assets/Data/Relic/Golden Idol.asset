@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Golden Idol
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Golden Idol
+  description: Shard appears 30% more often on the board
+  icon: {fileID: -7305782096149129571, guid: 078f6cc8a2fde664f8ed31dbb51ca581, type: 3}
+  price: 25
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
   blessingRateBonus: 0
-  shardRateBonus: 0
+  shardRateBonus: 0.3
   furyRateBonus: 0
   mirrorRateBonus: 0
   totemRateBonus: 0

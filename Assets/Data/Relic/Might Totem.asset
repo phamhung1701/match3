@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Might Totem
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Might Totem
+  description: Matching Totem now grants +50 Might per tile
+  icon: {fileID: 578577090828726068, guid: 64ed90ade71bd3f4f9011dd6e46d290c, type: 3}
+  price: 40
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   shardAmountMult: 1
   furyMultBonus: 0
   mirrorMultBonus: 0
-  totemMightBonus: 0
+  totemMightBonus: 50
   totemBlessingBonus: 0
   bonusFlow: 0
   bonusWhirl: 0

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Mirror Shard
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Mirror Shard
+  description: Mirror multiplier bonus is increased by 0.5
+  icon: {fileID: 3114513552956505908, guid: 307a669b373b6d44e8855c70bb80befb, type: 3}
+  price: 45
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   blessingAmountMult: 1
   shardAmountMult: 1
   furyMultBonus: 0
-  mirrorMultBonus: 0
+  mirrorMultBonus: 0.5
   totemMightBonus: 0
   totemBlessingBonus: 0
   bonusFlow: 0

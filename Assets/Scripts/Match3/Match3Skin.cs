@@ -76,6 +76,12 @@ public class Match3Skin : MonoBehaviour
     [SerializeField]
     TextMeshPro requiredText;
 
+    [SerializeField]
+    TextMeshPro trialNameText;
+
+    [SerializeField]
+    TextMeshPro bossDescriptionText;
+
     private void Awake()
     {
         gamePanel.SetActive(false);
@@ -114,9 +120,10 @@ public class Match3Skin : MonoBehaviour
 
     string FormatSmart(float value)
     {
+        // Integer when whole, 1 decimal when fractional
         return Mathf.Approximately(value % 1f, 0f)
             ? ((int)value).ToString()
-            : value.ToString("0.##");
+            : value.ToString("0.0");
     }
 
     void ProcessMatches()
@@ -180,6 +187,27 @@ public class Match3Skin : MonoBehaviour
         displayedScore = 0f;  // Reset for new game
         game.StartNewGame();
         requiredText.SetText("Required: "+ game.RequireScore);
+        
+        // Display trial name
+        if (trialNameText != null)
+        {
+            trialNameText.SetText(game.GetTrialName());
+        }
+        
+        // Display boss description (Trial 3 only)
+        if (bossDescriptionText != null)
+        {
+            if (game.currentBoss != null)
+            {
+                bossDescriptionText.gameObject.SetActive(true);
+                bossDescriptionText.SetText(game.currentBoss.description);
+            }
+            else
+            {
+                bossDescriptionText.gameObject.SetActive(false);
+            }
+        }
+        
         ResetUI();
         tileOffset = -0.5f * (float2)(game.Size - 1);
         if (tiles.IsUndefined)

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Fortune Cookie
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Fortune Cookie
+  description: All Shard gains from matches are doubled
+  icon: {fileID: -503688003423121182, guid: 5a6e014779dedaa48b743f204f939d69, type: 3}
+  price: 40
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
   blightRateReduction: 0
   mightAmountMult: 1
   blessingAmountMult: 1
-  shardAmountMult: 1
+  shardAmountMult: 2
   furyMultBonus: 0
   mirrorMultBonus: 0
   totemMightBonus: 0

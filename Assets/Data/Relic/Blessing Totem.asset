@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Blessing Totem
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Blessing Totem
+  description: Matching Totem now grants +15 Blessing per tile
+  icon: {fileID: 413867059330535881, guid: 2816e06f7dd3dfd41a770c9132b46704, type: 3}
+  price: 40
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -31,7 +31,7 @@ MonoBehaviour:
   furyMultBonus: 0
   mirrorMultBonus: 0
   totemMightBonus: 0
-  totemBlessingBonus: 0
+  totemBlessingBonus: 15
   bonusFlow: 0
   bonusWhirl: 0
   startingShards: 0

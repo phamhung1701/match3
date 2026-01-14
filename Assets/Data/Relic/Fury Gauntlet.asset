@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicName: Fury Gauntlet
   description: Fury multiplier bonus is increased by 0.3
-  icon: {fileID: 0}
+  icon: {fileID: -8389084190571122465, guid: 3f216e4f2cc2b3b4594d17ddd8d10748, type: 3}
   price: 45
   bonusMight: 0
   bonusBlessing: 0

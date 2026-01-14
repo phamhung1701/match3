@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
   m_Name: Void Seal
   m_EditorClassIdentifier: 
-  relicName: 
-  description: 
-  icon: {fileID: 0}
-  price: 0
+  relicName: Void Seal
+  description: Blight appears 50% less often on the board
+  icon: {fileID: -5031460554975327208, guid: e9fa3f45cd67c3c4bbb8fc5296b6a518, type: 3}
+  price: 35
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
   furyRateBonus: 0
   mirrorRateBonus: 0
   totemRateBonus: 0
-  blightRateReduction: 0
+  blightRateReduction: 0.5
   mightAmountMult: 1
   blessingAmountMult: 1
   shardAmountMult: 1
