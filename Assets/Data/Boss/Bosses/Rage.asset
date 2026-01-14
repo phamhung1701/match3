@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Rage
   m_EditorClassIdentifier: 
   bossName: Rage
+  description: 
   icon: {fileID: 0}
   minCycle: 1
   differentModifier: 0
-  effects: []
+  effects:
+  - type: 6
+    value: 0

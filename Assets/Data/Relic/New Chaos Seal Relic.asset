@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a0148e5dfd70eb4782d8c95fbe70ddd, type: 3}
-  m_Name: Harmony Stone
+  m_Script: {fileID: 11500000, guid: c6a2f1f4b42441b499ee78d3d36101ed, type: 3}
+  m_Name: New Chaos Seal Relic
   m_EditorClassIdentifier: 
-  relicName: Harmony Stone
-  description: All Blessing gained from matches is multiplied by 1.5
-  icon: {fileID: -3633905314347428345, guid: c455a3ea17b4ba649a9b4bd333df3a7d, type: 3}
-  price: 40
+  relicName: 
+  description: 
+  icon: {fileID: 0}
+  price: 0
   bonusMight: 0
   bonusBlessing: 0
   mightRateBonus: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
   totemRateBonus: 0
   blightRateReduction: 0
   mightAmountMult: 1
-  blessingAmountMult: 1.5
+  blessingAmountMult: 1
   shardAmountMult: 1
   furyMultBonus: 0
   mirrorMultBonus: 0

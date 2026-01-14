@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c24f1485a6e55b14fb7a894e0a790ef8, type: 3}
   m_Name: Faith
   m_EditorClassIdentifier: 
-  bossName: 
+  bossName: Faith
+  description: 
   icon: {fileID: 0}
   minCycle: 1
   differentModifier: 0
   effects:
   - type: 2
-    value: 0
+    value: 20

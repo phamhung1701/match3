@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f4a604b431a6754c8ab4e7cf48cd639, type: 3}
   m_Name: Boss Database
   m_EditorClassIdentifier: 
-  allBosses: []
+  allBosses:
+  - {fileID: 11400000, guid: 541667d013a89f042ae808ae783e868a, type: 2}
+  - {fileID: 11400000, guid: 09de0d42c7de4bc4cac4a3550f37c09b, type: 2}
+  - {fileID: 11400000, guid: 33deeabe9f6009d4b90b0f7534334df8, type: 2}
+  - {fileID: 11400000, guid: c320336d2e99cf048b86b3c1ddb90df4, type: 2}
+  - {fileID: 11400000, guid: f01af3cb63228134cbacf6ebf3915f95, type: 2}
+  - {fileID: 11400000, guid: f8f56d6e40cf1ef4992a785083c20478, type: 2}
+  - {fileID: 11400000, guid: d5fa7bc51bb3c9a4486d870a07b380e7, type: 2}
+  - {fileID: 11400000, guid: 6c17ba24eefd50645868ad7d095e0366, type: 2}
   baseScoreMultiplier: 1.5
   finalityMultiplier: 4

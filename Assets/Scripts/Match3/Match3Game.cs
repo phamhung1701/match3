@@ -32,9 +32,6 @@ public class Match3Game : MonoBehaviour
     public int cycle = 1;
     public int trial = 1;
 
-    // Boss System
-    [SerializeField] private BossDatabase bossDatabase;
-    public BossData currentBoss { get; private set; }
 
     private void SetRate()
     {
@@ -47,60 +44,29 @@ public class Match3Game : MonoBehaviour
         totem_rate = 0.12f;
         blight_rate = 0.10f;
 
-        // Apply relic rate modifiers
-        might_rate += Data.Instance.GetMightRateBonus();
-        blessing_rate += Data.Instance.GetBlessingRateBonus();
-        shard_rate += Data.Instance.GetShardRateBonus();
-        fury_rate += Data.Instance.GetFuryRateBonus();
-        mirror_rate += Data.Instance.GetMirrorRateBonus();
-        totem_rate += Data.Instance.GetTotemRateBonus();
-        blight_rate -= Data.Instance.GetBlightRateReduction();
-
-        // Apply boss effects (Trial 3 only)
-        if (trial == 3 && currentBoss != null)
+        // Apply all modifiers via EffectSystem
+        if (EffectSystem.Instance != null)
         {
-            ApplyBossEffectsToRates();
+            GameModifiers mods = EffectSystem.Instance.GetRateModifiers(this);
+            
+            might_rate += mods.mightRateBonus;
+            blessing_rate += mods.blessingRateBonus;
+            shard_rate += mods.shardRateBonus;
+            fury_rate += mods.furyRateBonus;
+            mirror_rate += mods.mirrorRateBonus;
+            totem_rate += mods.totemRateBonus;
+            blight_rate -= mods.blightRateReduction;
         }
 
         // Clamp rates to valid range
         blight_rate = Mathf.Max(0f, blight_rate);
     }
 
-    private void ApplyBossEffectsToRates()
-    {
-        foreach (BossEffect effect in currentBoss.effects)
-        {
-            switch (effect.type)
-            {
-                case BossEffectType.BlightRateBonus:
-                    blight_rate += effect.value;
-                    break;
-                case BossEffectType.MightRateReduction:
-                    might_rate -= effect.value;
-                    break;
-                case BossEffectType.BlessingRateReduction:
-                    blessing_rate -= effect.value;
-                    break;
-            }
-        }
-    }
-
-    private int GetBossEffectValue(BossEffectType type)
-    {
-        if (currentBoss == null) return 0;
-        foreach (BossEffect effect in currentBoss.effects)
-        {
-            if (effect.type == type)
-                return (int)effect.value;
-        }
-        return 0;
-    }
-
     public string GetTrialName()
     {
-        if (trial == 3 && currentBoss != null)
+        if (BossManager.Instance != null)
         {
-            return currentBoss.GetTrialName();
+            return BossManager.Instance.GetTrialName(trial);
         }
         
         return trial switch
@@ -109,16 +75,6 @@ public class Match3Game : MonoBehaviour
             2 => "The Adept's Trial",
             _ => $"Trial {trial}"
         };
-    }
-
-    public bool HasBossEffect(BossEffectType type)
-    {
-        if (currentBoss == null) return false;
-        foreach (BossEffect effect in currentBoss.effects)
-        {
-            if (effect.type == type) return true;
-        }
-        return false;
     }
 
 
@@ -155,9 +111,9 @@ public class Match3Game : MonoBehaviour
         RequireScore = baseScore * (0.5f * trial + 0.5f);
         
         // Apply boss score multiplier for Trial 3
-        if (trial == 3 && currentBoss != null && bossDatabase != null)
+        if (trial == 3 && BossManager.Instance != null)
         {
-            RequireScore *= bossDatabase.GetScoreMultiplier(currentBoss);
+            RequireScore *= BossManager.Instance.GetScoreMultiplier();
         }
     }
 
@@ -177,25 +133,31 @@ public class Match3Game : MonoBehaviour
 
     public void StartNewGame()
     {
-        // Select boss for Trial 3
-        if (trial == 3 && bossDatabase != null)
+        // Select boss for Trial 3 via BossManager
+        if (trial == 3 && BossManager.Instance != null)
         {
-            currentBoss = bossDatabase.GetBossForCycle(cycle);
+            BossManager.Instance.SelectBossForCycle(cycle);
         }
-        else
+        else if (BossManager.Instance != null)
         {
-            currentBoss = null;
+            BossManager.Instance.ClearBoss();
+        }
+        
+        // Get all modifiers from EffectSystem
+        GameModifiers mods = GameModifiers.Default();
+        if (EffectSystem.Instance != null)
+        {
+            mods = EffectSystem.Instance.CalculateModifiers(GameContext.ForScoreCalculation(this));
         }
         
         // Base resources + relic bonuses
-        flow = 4 + Data.Instance.GetBonusFlow();
-        whirl = 3 + Data.Instance.GetBonusWhirl();
+        flow = 4 + mods.flowBonus;
+        whirl = 3 + mods.whirlBonus;
         
-        // Apply boss flow reduction
-        if (currentBoss != null)
+        // Check whirl block
+        if (mods.blockWhirl)
         {
-            flow -= GetBossEffectValue(BossEffectType.ReduceFlow);
-            flow = Mathf.Max(1, flow); // Minimum 1 flow
+            whirl = 0;
         }
         
         TotalScore = 0;
@@ -204,11 +166,11 @@ public class Match3Game : MonoBehaviour
         Blessing = 0;
 
         // Apply relic stat bonuses
-        Might += Data.Instance.GetTotalBonusMight();
-        Blessing += Data.Instance.GetTotalBonusBlessing();
+        Might += mods.bonusMight;
+        Blessing += mods.bonusBlessing;
 
         // Starting shards bonus
-        Data.Instance.Shard += Data.Instance.GetStartingShards();
+        Data.Instance.Shard += mods.startingShards;
 
         if (grid.IsUndefined)
         {
@@ -474,18 +436,24 @@ public class Match3Game : MonoBehaviour
         ClearedTileCoordinates.Clear();
         Scores.Clear();
 
-        // Get relic bonuses once
-        float mightMult = Data.Instance.GetMightAmountMult();
-        float blessingMult = Data.Instance.GetBlessingAmountMult();
-        float shardMult = Data.Instance.GetShardAmountMult();
-        float furyBoost = Data.Instance.GetFuryMultBonus();
-        float mirrorBoost = Data.Instance.GetMirrorMultBonus();
-        float totemMight = Data.Instance.GetTotemMightBonus();
-        float totemBlessing = Data.Instance.GetTotemBlessingBonus();
-        float lengthBonus = Data.Instance.GetMatchLengthBonus();
-        float cascadeMight = Data.Instance.GetCascadeMightBonus();
-        float cascadeBlessing = Data.Instance.GetCascadeBlessingBonus();
-        float comboBonus = Data.Instance.GetComboMultBonus();
+        // Get all modifiers from EffectManager
+        GameModifiers mods = GameModifiers.Default();
+        if (EffectSystem.Instance != null)
+        {
+            mods = EffectSystem.Instance.CalculateModifiers(GameContext.ForScoreCalculation(this));
+        }
+        
+        float mightMult = mods.mightAmountMult;
+        float blessingMult = mods.blessingAmountMult;
+        float shardMult = mods.shardAmountMult;
+        float furyBoost = mods.furyMultBonus;
+        float mirrorBoost = mods.mirrorMultBonus;
+        float totemMight = mods.totemMightBonus;
+        float totemBlessing = mods.totemBlessingBonus;
+        float lengthBonus = mods.matchLengthBonus;
+        float cascadeMight = mods.cascadeMightBonus;
+        float cascadeBlessing = mods.cascadeBlessingBonus;
+        float comboBonus = mods.comboMultBonus;
 
         // Apply cascade bonuses (for matches beyond first)
         if (scoreMultiplier > 1)
