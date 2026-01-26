@@ -16,10 +16,14 @@ public static class SaveManager
             isInShop = isInShop
         };
 
-        // Save relic names for lookup on load
-        foreach (RelicData relic in Data.Instance.relics)
+        // Save relic names and stacks from RelicManager
+        if (RelicManager.Instance != null)
         {
-            data.relicNames.Add(relic.relicName);
+            foreach (var instance in RelicManager.Instance.OwnedRelics)
+            {
+                data.relicNames.Add(instance.Data.relicName);
+                data.relicStacks.Add(instance.Stacks);
+            }
         }
 
         string json = JsonUtility.ToJson(data, true);
@@ -39,6 +43,32 @@ public static class SaveManager
         SaveData data = JsonUtility.FromJson<SaveData>(json);
         Debug.Log($"Game loaded from {SavePath}");
         return data;
+    }
+
+    /// <summary>
+    /// Restore relics from save data.
+    /// Call this after loading save data.
+    /// </summary>
+    public static void RestoreRelics(SaveData data, RelicDatabase relicDatabase)
+    {
+        if (data == null || RelicManager.Instance == null) return;
+        
+        RelicManager.Instance.ClearAllRelics();
+        
+        for (int i = 0; i < data.relicNames.Count; i++)
+        {
+            RelicData relicData = relicDatabase.GetRelicByName(data.relicNames[i]);
+            if (relicData != null)
+            {
+                var instance = RelicManager.Instance.AddRelic(relicData);
+                
+                // Restore stacks if available
+                if (instance != null && i < data.relicStacks.Count)
+                {
+                    instance.Stacks = data.relicStacks[i];
+                }
+            }
+        }
     }
 
     public static bool HasSaveFile()

@@ -28,7 +28,7 @@ public class GameOverUI : MonoBehaviour
     void Restart()
     {
         // Clear persistent data
-        Data.Instance.relics.Clear();
+        if (RelicManager.Instance != null) RelicManager.Instance.ClearAllRelics();
         Data.Instance.Shard = 0;
 
         gameOverPanel.SetActive(false);

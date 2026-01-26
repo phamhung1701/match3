@@ -31,13 +31,20 @@ public class OwnedRelicsDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        Data.OnRelicsChanged += RefreshDisplay;
+        if (RelicManager.Instance != null)
+        {
+            RelicManager.Instance.OnRelicsChanged += RefreshDisplay;
+        }
+        RefreshDisplay();
     }
 
     public void RefreshDisplay()
     {
+        if (RelicManager.Instance == null) return;
+        
         // Get minimum length of all arrays
         int slotCount = Mathf.Min(relicsIconSlots.Length, relicSlotButtons.Length, sellButtons.Length);
+        var ownedRelics = RelicManager.Instance.OwnedRelics;
 
         // Hide all slots and sell buttons first
         for (int i = 0; i < slotCount; i++)
@@ -48,11 +55,12 @@ public class OwnedRelicsDisplay : MonoBehaviour
         }
 
         // Show icons for owned relics
-        for (int i = 0; i < Data.Instance.relics.Count && i < slotCount; i++)
+        for (int i = 0; i < ownedRelics.Count && i < slotCount; i++)
         {
-            if (Data.Instance.relics[i] != null && Data.Instance.relics[i].icon != null)
+            var instance = ownedRelics[i];
+            if (instance != null && instance.Data != null && instance.Data.icon != null)
             {
-                relicsIconSlots[i].sprite = Data.Instance.relics[i].icon;
+                relicsIconSlots[i].sprite = instance.Data.icon;
                 relicsIconSlots[i].gameObject.SetActive(true);
                 relicSlotButtons[i].interactable = true;
             }
@@ -61,7 +69,10 @@ public class OwnedRelicsDisplay : MonoBehaviour
 
     private void OnRelicClicked(int index)
     {
-        if (index >= Data.Instance.relics.Count || Data.Instance.relics[index] == null)
+        if (RelicManager.Instance == null) return;
+        
+        var ownedRelics = RelicManager.Instance.OwnedRelics;
+        if (index >= ownedRelics.Count || ownedRelics[index] == null)
             return;
         if (index >= sellButtons.Length || index >= sellPriceTexts.Length)
             return;
@@ -78,25 +89,23 @@ public class OwnedRelicsDisplay : MonoBehaviour
         // Show this one if it wasn't already visible
         if (!isVisible)
         {
-            RelicData relic = Data.Instance.relics[index];
-            sellPriceTexts[index].text = $"{relic.price / 2}";
+            var instance = ownedRelics[index];
+            sellPriceTexts[index].text = $"{instance.Data.price / 2}";
             sellButtons[index].gameObject.SetActive(true);
         }
     }
 
     private void OnSellClicked(int index)
     {
-        if (index >= 0 && index < Data.Instance.relics.Count)
-        {
-            RelicData relic = Data.Instance.relics[index];
-            shop.SellRelic(relic);
-            
-        }
+        shop.SellRelic(index);
     }
 
     private void OnDisable()
     {
-        Data.OnRelicsChanged -= RefreshDisplay;
+        if (RelicManager.Instance != null)
+        {
+            RelicManager.Instance.OnRelicsChanged -= RefreshDisplay;
+        }
     }
 
     public void SetActiveDisplay(bool active)

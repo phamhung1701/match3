@@ -49,22 +49,12 @@ public class StartMenuUI : MonoBehaviour
         Data.Instance.Shard = saveData.shards;
         game.cycle = saveData.cycle;
         game.trial = saveData.trial;
-        shop.RelicNumber = saveData.relicNames.Count;
 
-        // Restore relics from names
-        Data.Instance.relics.Clear();
-        foreach (string relicName in saveData.relicNames)
-        {
-            RelicData relic = relicDatabase.GetRelicByName(relicName);
-            if (relic != null)
-            {
-                Data.Instance.relics.Add(relic);
-            }
-        }
+        // Restore relics via SaveManager
+        SaveManager.RestoreRelics(saveData, relicDatabase);
 
         startGameObject.SetActive(false);
         relicsDisplay.SetActiveDisplay(true);
-        Data.OnRelicsChanged?.Invoke();
 
         // Restore to correct state
         if (saveData.isInShop)

@@ -5,9 +5,6 @@ using TMPro;
 
 public class Shop : MonoBehaviour
 {
-    public int RelicNumber = 0;
-    private int MaxRelicCount = 4;
-
     [SerializeField] int slotCount = 3;
     [SerializeField] RelicDatabase relicDatabase;
     
@@ -67,18 +64,19 @@ public class Shop : MonoBehaviour
 
     public void BuyRelic(int index)
     {
-        if (currentShop[index] == null)
+        if (currentShop[index] == null) return;
+        if (RelicManager.Instance == null) return;
+        
+        bool canAfford = Data.Instance.Shard >= currentShop[index].price;
+        bool hasSpace = RelicManager.Instance.HasSpace;
+        
+        if (canAfford && hasSpace)
         {
-            return;
-        }
-        if (Data.Instance.Shard >= currentShop[index].price && RelicNumber < MaxRelicCount)
-        {
-            Data.Instance.addRelic(currentShop[index]);
+            RelicManager.Instance.AddRelic(currentShop[index]);
             Data.Instance.Shard -= currentShop[index].price;
             relicSlots[index].MarkAsSold();
             shardText.SetText("Shards: {0}", Data.Instance.Shard);
             currentShop[index] = null;
-            RelicNumber++;
         }
     }
 
@@ -101,12 +99,16 @@ public class Shop : MonoBehaviour
 
     public bool IsShopOpen => shopPanel.activeSelf;
 
-    public void SellRelic(RelicData relic)
+    public void SellRelic(int index)
     {
-        int sellPrice = relic.price / 2;
+        if (RelicManager.Instance == null) return;
+        
+        var instance = RelicManager.Instance.GetRelicAt(index);
+        if (instance == null) return;
+        
+        int sellPrice = instance.Data.price / 2;
         Data.Instance.Shard += sellPrice;
-        Data.Instance.removeRelic(relic);
-        RelicNumber--;
+        RelicManager.Instance.RemoveRelicAt(index);
         shardText.SetText("Shards: {0}", Data.Instance.Shard);
     }
 }

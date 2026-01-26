@@ -367,13 +367,11 @@ public class Match3Skin : MonoBehaviour
     public void RestartGame()
     {
         gamePanel.SetActive(true);
-        Data.Instance.relics.Clear();
+        if (RelicManager.Instance != null) RelicManager.Instance.ClearAllRelics();
         Data.Instance.Shard = 0;
-        shop.RelicNumber = 0;
         game.trial = 1;
         game.cycle = 1;
         StartNewGame();
-        Data.OnRelicsChanged?.Invoke();
         ResetUI();
     }
 
